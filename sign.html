@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Dashboard Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <script defer src="js/script.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: url('https://i.postimg.cc/Y9yb5NMf/dashboard.jpg') no-repeat center center/cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+
+        .login-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 400px;
+            color: white;
+        }
+
+        .login-box {
+            text-align: center;
+        }
+
+        .logo {
+            width: 60px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: #339DFF;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            margin-bottom: 25px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-field i {
+            position: absolute;
+            top: 12px;
+            right: 10px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            background-color: #339DFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .login-btn:hover {
+            background-color: #217cd3;
+        }
+
+        .demo {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #bbb;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+            <img src="https://i.postimg.cc/C1YgZgq6/medical-icon-t-Di-M1op4.jpg" class="logo" alt="Hospital Logo" />
+
+            <h2>Hospital Dashboard</h2>
+            <p class="subtitle">Secure access to medical management system</p>
+
+            <form onsubmit="event.preventDefault(); window.location.href='index.html';">
+                <!-- Email -->
+                <label>Email Address</label>
+                <input type="email" required />
+
+                <!-- Password -->
+                <label>Password</label>
+                <div class="password-field">
+                    <input type="password" id="passwordInput" required />
+                    <i class="fa-solid fa-eye" id="togglePassword"></i>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+
+            <div class="demo">
+                <strong>Demo Credentials:</strong><br>
+                admin@hospital.com / password123
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordInput = document.getElementById("passwordInput");
+
+        togglePassword.addEventListener("click", () => {
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            togglePassword.classList.toggle("fa-eye");
+            togglePassword.classList.toggle("fa-eye-slash");
+        });
+
+        <!-- index.html -->
+        <form onsubmit="event.preventDefault(); window.location.href='./index.html';">
+            ...
+            <button type="submit" class="login-btn">Sign In</button>
+        </form>
+
+    </script>
+
+</body>
+
+</html>

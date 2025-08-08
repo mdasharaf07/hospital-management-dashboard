@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediAsh - Hospital Management Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+</head>
+
+<body
+    class="flex h-screen overflow-hidden bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <aside id="sidebar"
+        class="sidebar sidebar-expanded bg-white dark:bg-gray-800 shadow-xl flex flex-col space-y-2 border-r border-gray-200 dark:border-gray-700 fixed inset-y-0 left-0 z-30 overflow-y-auto">
+        <div
+            class="h-16 flex items-center justify-center px-4 border-b border-gray-200 dark:border-gray-700 flex-shrink-0">
+            <div class="flex items-center">
+                <svg class="h-10 w-10 text-blue-600 dark:text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+                <span class="sidebar-logo-text ml-3 text-2xl font-bold text-gray-800 dark:text-white">MediAsh</span>
+            </div>
+        </div>
+
+        <nav class="flex-grow px-2 space-y-1 pt-2">
+            <a href="#" data-section="dashboard"
+                class="sidebar-link active flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="grid-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Dashboard</span>
+            </a>
+            <a href="#" data-section="patients"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="people-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Patient Management</span>
+            </a>
+            <a href="#" data-section="doctors"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="medkit-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Doctor Management</span>
+            </a>
+            <a href="#" data-section="appointments"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="calendar-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Appointments</span>
+            </a>
+            <a href="#" data-section="billing"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="card-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Billing & Invoices</span>
+            </a>
+            <a href="#" data-section="pharmacy"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="flask-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Pharmacy</span>
+            </a>
+            <a href="#" data-section="records"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="document-text-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Medical Records</span>
+            </a>
+            <a href="#" data-section="staff"
+                class="sidebar-link flex items-center py-2.5 px-4 rounded-lg hover:bg-blue-500 hover:text-white dark:hover:bg-blue-600 group">
+                <ion-icon name="shield-checkmark-outline"
+                    class="text-xl text-gray-500 dark:text-gray-400 group-hover:text-white"></ion-icon>
+                <span class="sidebar-text ml-3 text-sm font-medium">Staff & Admin</span>
+            </a>
+        </nav>
+
+        <div class="mt-auto p-4 border-t border-gray-200 dark:border-gray-700">
+            <div class="flex items-center">
+                <img src="https://i.postimg.cc/N0F0j0q8/gamer-9312699.png" alt="User Avatar"
+                    class="h-10 w-10 rounded-full object-cover">
+                <div class="profile-info ml-3">
+                    <p class="text-sm font-medium text-gray-800 dark:text-white">Dr. Mohamed Asharaf</p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">Administrator</p>
+                </div>
+            </div>
+            <button
+                class="w-full mt-3 flex items-center justify-center py-2 px-4 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <ion-icon name="log-out-outline" class="text-lg mr-2"></ion-icon>
+                <span class="sidebar-text"><a href="./sign.html">Logout</a></span>
+            </button>
+        </div>
+    </aside>
+
+    <div id="mainContent" class="flex-1 flex flex-col overflow-hidden transition-all duration-300 ease-in-out ml-64">
+        <header
+            class="h-16 bg-white dark:bg-gray-800 shadow-md flex items-center justify-between px-6 flex-shrink-0 border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center">
+                <button id="sidebarToggle"
+                    class="flex p-2 rounded-md text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500">
+                    <ion-icon name="menu-outline" class="text-2xl"></ion-icon>
+                </button>
+                <div class="relative ml-4 hidden sm:block">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center">
+                        <ion-icon name="search-outline" class="text-gray-400"></ion-icon>
+                    </span>
+                    <input type="text" placeholder="Search..."
+                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:ring-blue-500 focus:border-blue-500 text-sm">
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="darkModeToggle"
+                    class="flex p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                    <ion-icon name="moon-outline" id="darkModeIcon" class="text-xl"></ion-icon>
+                </button>
+                <button
+                    class="flex relative p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none">
+                    <ion-icon name="notifications-outline" class="text-xl"></ion-icon>
+                    <span class="absolute top-1 right-1 h-2 w-2 bg-red-500 rounded-full"></span>
+                </button>
+                <div class="relative">
+                    <button id="userMenuButton" class="flex items-center space-x-2 focus:outline-none">
+                        <img src="https://i.postimg.cc/N0F0j0q8/gamer-9312699.png" alt="User Avatar"
+                            class="h-8 w-8 rounded-full object-cover">
+                        <span class="hidden md:inline text-sm font-medium text-gray-700 dark:text-gray-300">Dr.
+                            Asharaf</span>
+                        <ion-icon name="chevron-down-outline"
+                            class="hidden md:inline text-xs text-gray-500 dark:text-gray-400"></ion-icon>
+                    </button>
+                    <div id="userMenu"
+                        class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-md shadow-lg py-1 hidden ring-1 ring-black ring-opacity-5 z-10">
+                        <a href="#"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">My
+                            Profile</a>
+                        <a href="#"
+                            class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">Settings</a>
+                        <a href="./sign.html"
+                            class="block px-4 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700">Logout</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 space-y-6">
+            <section id="dashboard" class="content-section" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Dashboard</h1>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-right" data-aos-delay="100">
+                        <div class="p-4 sm:p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Patients</p>
+                                <p class="text-3xl font-bold text-gray-800 dark:text-white">1,280</p>
+                            </div>
+                            <div class="flex p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+                                <ion-icon name="people-circle-outline"
+                                    class="text-2xl text-blue-500 dark:text-blue-400"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-right" data-aos-delay="200">
+                        <div class="p-4 sm:p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Appointments Today</p>
+                                <p class="text-3xl font-bold text-gray-800 dark:text-white">72</p>
+                            </div>
+                            <div class="flex p-3 bg-green-100 dark:bg-green-900 rounded-full">
+                                <ion-icon name="calendar-number-outline"
+                                    class="text-2xl text-green-500 dark:text-green-400"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-right" data-aos-delay="300">
+                        <div class="p-4 sm:p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Available Doctors</p>
+                                <p class="text-3xl font-bold text-gray-800 dark:text-white">35</p>
+                            </div>
+                            <div class="flex p-3 bg-yellow-100 dark:bg-yellow-900 rounded-full">
+                                <ion-icon name="fitness-outline"
+                                    class="text-2xl text-yellow-500 dark:text-yellow-400"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg shadow-green-glow overflow-hidden transition-all duration-300"
+                        data-aos="fade-right" data-aos-delay="400">
+                        <div class="p-4 sm:p-6 flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 dark:text-gray-400">Revenue (This Month)</p>
+                                <p class="text-3xl font-bold text-gray-800 dark:text-white">₹25,25,670</p>
+                            </div>
+                            <div class="flex p-3 bg-indigo-100 dark:bg-indigo-900 rounded-full">
+                                <ion-icon name="cash-outline"
+                                    class="text-2xl text-indigo-500 dark:text-indigo-400"></ion-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-up" data-aos-delay="500">
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Patient
+                                Admissions</h2>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <canvas id="patientAdmissionsChart" height="200"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-up" data-aos-delay="600">
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Department
+                                Popularity</h2>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <canvas id="departmentPopularityChart" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 md:col-span-1">
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Quick Links
+                            </h2>
+                        </div>
+                        <div class="p-4 sm:p-6 space-y-3">
+                            <a href="#" data-section="appointments"
+                                class="sidebar-link flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                                <ion-icon name="add-circle-outline" class="text-xl text-blue-500 mr-3"></ion-icon>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">New
+                                    Appointment</span>
+                            </a>
+                            <a href="#" data-section="patients"
+                                class="sidebar-link flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                                <ion-icon name="person-add-outline" class="text-xl text-green-500 mr-3"></ion-icon>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Register
+                                    Patient</span>
+                            </a>
+                            <a href="#" data-section="billing"
+                                class="sidebar-link flex items-center p-3 rounded-lg bg-gray-50 dark:bg-gray-700/50 hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+                                <ion-icon name="receipt-outline" class="text-xl text-yellow-500 mr-3"></ion-icon>
+                                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Generate
+                                    Invoice</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div
+                        class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300 md:col-span-2">
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Recent
+                                Activity</h2>
+                        </div>
+                        <div class="p-4 sm:p-6">
+                            <ul class="space-y-4">
+                                <li class="flex items-start space-x-3">
+                                    <img src="https://www.codewithfaraz.com/tools/placeholder?size=26&bgColor=A0AEC0&textColor=FFFFFF&text=JD"
+                                        class="h-8 w-8 rounded-full" alt="User">
+                                    <div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300"><strong
+                                                class="font-medium">John Doe</strong> checked in for appointment with
+                                            <strong class="font-medium">Dr. Smith</strong>.
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">10 minutes ago</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <img src="https://www.codewithfaraz.com/tools/placeholder?size=26&bgColor=4A5568&textColor=FFFFFF&text=SA"
+                                        class="h-8 w-8 rounded-full" alt="User">
+                                    <div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300"><strong
+                                                class="font-medium">Sarah Adams</strong> updated patient record for
+                                            <strong class="font-medium">#P00123</strong>.
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">45 minutes ago</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-3">
+                                    <img src="https://www.codewithfaraz.com/tools/placeholder?size=26&bgColor=9F7AEA&textColor=FFFFFF&text=MJ"
+                                        class="h-8 w-8 rounded-full" alt="User">
+                                    <div>
+                                        <p class="text-sm text-gray-700 dark:text-gray-300">New prescription added for
+                                            <strong class="font-medium">Michael Johnson</strong> by <strong
+                                                class="font-medium">Dr. Lee</strong>.
+                                        </p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">1 hour ago</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="patients" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Patient Management</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300">
+                    <div
+                        class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                        <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100 mb-2 sm:mb-0">
+                            Patient List</h2>
+                        <button id="addPatientBtn"
+                            class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500">
+                            <ion-icon name="add-outline" class="mr-1 -ml-1"></ion-icon> Add New Patient
+                        </button>
+                    </div>
+                    <div class="p-4 sm:p-6">
+                        <table id="patientTable" class="display responsive nowrap w-full text-sm">
+                            <thead>
+                                <tr>
+                                    <th>Patient ID</th>
+                                    <th>Name</th>
+                                    <th>Age</th>
+                                    <th>Gender</th>
+                                    <th>Last Visit</th>
+                                    <th>Assigned Doctor</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="doctors" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Doctor Management</h1>
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="flex space-x-2 mb-4 sm:mb-0">
+                        <input type="text" placeholder="Search doctors..."
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 w-full sm:w-auto">
+                        <select
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                            <option>Filter by Speciality</option>
+                            <option>Cardiology</option>
+                            <option>Neurology</option>
+                            <option>Pediatrics</option>
+                        </select>
+                    </div>
+                    <button
+                        class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500">
+                        <ion-icon name="person-add-outline" class="mr-1 -ml-1"></ion-icon> Add New Doctor
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="zoom-in">
+                        <div class="p-6 flex flex-col items-center text-center">
+                            <img src="https://www.codewithfaraz.com/tools/placeholder?size=80&bgColor=E2E8F0&textColor=4A5568&text=Dr.S"
+                                class="w-24 h-24 rounded-full mb-4 shadow-md" alt="Doctor">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Dr. Alice Smith</h3>
+                            <p class="text-sm text-blue-500 dark:text-blue-400">Cardiologist</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">MBBS, MD (Cardiology)</p>
+                            <div class="mt-3 text-xs space-y-1">
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="time-outline" class="mr-1 text-green-500"></ion-icon> Available:
+                                    Mon-Fri, 9 AM - 5 PM
+                                </p>
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="call-outline" class="mr-1 text-blue-500"></ion-icon> +91 234 567
+                                    0890
+                                </p>
+                            </div>
+                            <div class="mt-4 flex space-x-2">
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 hover:text-blue-600"><ion-icon
+                                        name="eye-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-green-500 hover:text-green-600"><ion-icon
+                                        name="pencil-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 hover:text-red-600"><ion-icon
+                                        name="trash-outline" class="text-lg"></ion-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="zoom-in" data-aos-delay="100">
+                        <div class="p-6 flex flex-col items-center text-center">
+                            <img src="https://www.codewithfaraz.com/tools/placeholder?size=80&bgColor=CBD5E0&textColor=4A5568&text=Dr.J"
+                                class="w-24 h-24 rounded-full mb-4 shadow-md" alt="Doctor">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Dr. Bob Johnson</h3>
+                            <p class="text-sm text-blue-500 dark:text-blue-400">Neurologist</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">MBBS, DM (Neurology)</p>
+                            <div class="mt-3 text-xs space-y-1">
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="time-outline" class="mr-1 text-green-500"></ion-icon> Available:
+                                    Tue, Thu, Sat
+                                </p>
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="call-outline" class="mr-1 text-blue-500"></ion-icon> +91 345 678
+                                    0901
+                                </p>
+                            </div>
+                            <div class="mt-4 flex space-x-2">
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 hover:text-blue-600"><ion-icon
+                                        name="eye-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-green-500 hover:text-green-600"><ion-icon
+                                        name="pencil-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 hover:text-red-600"><ion-icon
+                                        name="trash-outline" class="text-lg"></ion-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="zoom-in" data-aos-delay="200">
+                        <div class="p-6 flex flex-col items-center text-center">
+                            <img src="https://www.codewithfaraz.com/tools/placeholder?size=80&bgColor=A0AEC0&textColor=2D3748&text=Dr.C"
+                                class="w-24 h-24 rounded-full mb-4 shadow-md" alt="Doctor">
+                            <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Dr. Carol White</h3>
+                            <p class="text-sm text-blue-500 dark:text-blue-400">Pediatrician</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">MBBS, DCH</p>
+                            <div class="mt-3 text-xs space-y-1">
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="time-outline" class="mr-1 text-red-500"></ion-icon> On Leave
+                                </p>
+                                <p class="flex items-center justify-center text-gray-600 dark:text-gray-300">
+                                    <ion-icon name="call-outline" class="mr-1 text-blue-500"></ion-icon> +91 456 789
+                                    0012
+                                </p>
+                            </div>
+                            <div class="mt-4 flex space-x-2">
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 hover:text-blue-600"><ion-icon
+                                        name="eye-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-green-500 hover:text-green-600"><ion-icon
+                                        name="pencil-outline" class="text-lg"></ion-icon></button>
+                                <button
+                                    class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 hover:text-red-600"><ion-icon
+                                        name="trash-outline" class="text-lg"></ion-icon></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="appointments" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Appointment Scheduling</h1>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300">
+                    <div class="p-4 sm:p-6">
+                        <div id="calendar" class="h-[600px] min-h-[500px]"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="billing" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Billing and Invoices</h1>
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <input type="text" placeholder="Search invoices by ID or Patient Name..."
+                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 w-full sm:w-1/2 mb-4 sm:mb-0">
+                    <button id="createInvoiceBtn"
+                        class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500">
+                        <ion-icon name="document-attach-outline" class="mr-1 -ml-1"></ion-icon> Create New Invoice
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-up">
+                        <div
+                            class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Invoice
+                                #INV001</h3>
+                            <span
+                                class="text-xs font-semibold py-1 px-2.5 rounded-full bg-green-100 text-green-700 dark:bg-green-700 dark:text-green-100">Paid</span>
+                        </div>
+                        <div class="p-4 sm:p-6 space-y-3 text-sm">
+                            <p><strong class="text-gray-600 dark:text-gray-400">Patient:</strong> John Doe</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Date:</strong> 2024-05-10</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Amount:</strong> ₹22500.00</p>
+                            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex space-x-2">
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:ring-gray-400 btn-sm flex-1 text-xs">View
+                                    Details</button>
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 btn-sm flex-1 text-xs">Download
+                                    PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-up" data-aos-delay="100">
+                        <div
+                            class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Invoice
+                                #INV002</h3>
+                            <span
+                                class="text-xs font-semibold py-1 px-2.5 rounded-full bg-yellow-100 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-100">Pending</span>
+                        </div>
+                        <div class="p-4 sm:p-6 space-y-3 text-sm">
+                            <p><strong class="text-gray-600 dark:text-gray-400">Patient:</strong> Jane Smith</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Date:</strong> 2024-05-12</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Amount:</strong> ₹44250.50</p>
+                            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex space-x-2">
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:ring-gray-400 btn-sm flex-1 text-xs">View
+                                    Details</button>
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 btn-sm flex-1 text-xs">Send
+                                    Reminder</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-up" data-aos-delay="200">
+                        <div
+                            class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                            <h3 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">Invoice
+                                #INV003</h3>
+                            <span
+                                class="text-xs font-semibold py-1 px-2.5 rounded-full bg-red-100 text-red-700 dark:bg-red-700 dark:text-red-100">Overdue</span>
+                        </div>
+                        <div class="p-4 sm:p-6 space-y-3 text-sm">
+                            <p><strong class="text-gray-600 dark:text-gray-400">Patient:</strong> Mike Brown</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Date:</strong> 2024-04-20</p>
+                            <p><strong class="text-gray-600 dark:text-gray-400">Amount:</strong> ₹8500.00</p>
+                            <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex space-x-2">
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:ring-gray-400 btn-sm flex-1 text-xs">View
+                                    Details</button>
+                                <button
+                                    class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-red-500 hover:bg-red-600 text-white focus:ring-red-400 btn-sm flex-1 text-xs">Mark
+                                    as Paid</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pharmacy" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Pharmacy Management</h1>
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <div class="flex space-x-2 mb-4 sm:mb-0">
+                        <input type="text" placeholder="Search medicines..."
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 w-full sm:w-auto">
+                        <select
+                            class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700">
+                            <option>Filter by Category</option>
+                            <option>Analgesics</option>
+                            <option>Antibiotics</option>
+                            <option>Vitamins</option>
+                        </select>
+                    </div>
+                    <button
+                        class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500">
+                        <ion-icon name="add-circle-outline" class="mr-1 -ml-1"></ion-icon> Add New Medicine
+                    </button>
+                </div>
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300">
+                    <div class="p-4 sm:p-6 overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Medicine ID</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Name</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Category</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Stock</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Price</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Status</th>
+                                    <th
+                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                        Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                <tr data-aos="fade-in">
+                                    <td class="px-6 py-4 whitespace-nowrap">MED001</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        Paracetamol 500mg</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Analgesic</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">250 units</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">₹500.00</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100">In
+                                            Stock</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"><ion-icon
+                                                name="eye-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"><ion-icon
+                                                name="pencil-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"><ion-icon
+                                                name="trash-outline"></ion-icon></button>
+                                    </td>
+                                </tr>
+                                <tr data-aos="fade-in" data-aos-delay="50">
+                                    <td class="px-6 py-4 whitespace-nowrap">MED002</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        Amoxicillin 250mg</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Antibiotic</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">120 units</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">₹1200.00</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100">In
+                                            Stock</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"><ion-icon
+                                                name="eye-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"><ion-icon
+                                                name="pencil-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"><ion-icon
+                                                name="trash-outline"></ion-icon></button>
+                                    </td>
+                                </tr>
+                                <tr data-aos="fade-in" data-aos-delay="100">
+                                    <td class="px-6 py-4 whitespace-nowrap">MED003</td>
+                                    <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                        Vitamin C 1000mg</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">Vitamin</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">0 units</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">₹1580.75</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span
+                                            class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100">Out
+                                            of Stock</span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300"><ion-icon
+                                                name="eye-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-yellow-600 hover:text-yellow-900 dark:text-yellow-400 dark:hover:text-yellow-300"><ion-icon
+                                                name="pencil-outline"></ion-icon></button>
+                                        <button
+                                            class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300"><ion-icon
+                                                name="trash-outline"></ion-icon></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="records" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Medical Records</h1>
+                <div class="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center">
+                    <input type="text" placeholder="Search records by Patient ID or Name..."
+                        class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 w-full sm:w-1/2 mb-4 sm:mb-0">
+                    <button id="uploadRecordBtn"
+                        class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500">
+                        <ion-icon name="cloud-upload-outline" class="mr-1 -ml-1"></ion-icon> Upload New Record
+                    </button>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="zoom-in-up">
+                        <div class="p-2">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <ion-icon name="document-attach-outline" class="text-3xl text-blue-500"></ion-icon>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">Blood Test Report.pdf</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Patient: John Doe (P001)</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Uploaded: 2024-05-01 by Dr. Smith
+                            </p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Size: 1.2 MB</p>
+                            <div class="flex space-x-2">
+                                <button
+                                    class="flex items-center content-center px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:ring-gray-400 btn-sm text-xs flex-1"><ion-icon
+                                        name="eye-outline" class="mr-1"></ion-icon>Preview</button>
+                                <button
+                                    class="flex items-center content-center px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 btn-sm text-xs flex-1"><ion-icon
+                                        name="download-outline" class="mr-1"></ion-icon>Download</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="zoom-in-up" data-aos-delay="100">
+                        <div class="p-2">
+                            <div class="flex items-center space-x-3 mb-3">
+                                <ion-icon name="image-outline" class="text-3xl text-green-500"></ion-icon>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800 dark:text-white">X-Ray_Chest.jpg</h4>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400">Patient: Jane Smith (P002)</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Uploaded: 2024-04-25 by Dr. Lee</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-3">Size: 3.5 MB</p>
+                            <div class="flex space-x-2">
+                                <button
+                                    class="flex items-center content-center px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-gray-200 hover:bg-gray-300 text-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 focus:ring-gray-400 btn-sm text-xs flex-1"><ion-icon
+                                        name="eye-outline" class="mr-1"></ion-icon>Preview</button>
+                                <button
+                                    class="flex items-center content-center px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 btn-sm text-xs flex-1"><ion-icon
+                                        name="download-outline" class="mr-1"></ion-icon>Download</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="staff" class="content-section hidden" data-aos="fade-up">
+                <h1 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">Staff & Admin Panel</h1>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-right">
+                        <div
+                            class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">User Roles &
+                                Permissions</h2>
+                            <button
+                                class="px-4 py-2 rounded-lg font-medium transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:focus:ring-offset-gray-800 bg-blue-600 hover:bg-blue-700 text-white focus:ring-blue-500 btn-sm text-xs"><ion-icon
+                                    name="add-outline" class="mr-1"></ion-icon>Add New Role</button>
+                        </div>
+                        <div class="p-4 sm:p-6 overflow-x-auto">
+                            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700 text-sm">
+                                <thead class="bg-gray-50 dark:bg-gray-700">
+                                    <tr>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            Role</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            Permissions</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            Users</th>
+                                        <th
+                                            class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase">
+                                            Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap font-medium">Administrator</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">All Access</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">5</td>
+                                        <td class="px-4 py-2 whitespace-nowrap space-x-1">
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 text-xs"><ion-icon
+                                                    name="settings-outline"></ion-icon></button>
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 text-xs"><ion-icon
+                                                    name="trash-outline"></ion-icon></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap font-medium">Doctor</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">Patient Mgt, Appointments, Records</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">35</td>
+                                        <td class="px-4 py-2 whitespace-nowrap space-x-1">
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 text-xs"><ion-icon
+                                                    name="settings-outline"></ion-icon></button>
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 text-xs"><ion-icon
+                                                    name="trash-outline"></ion-icon></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap font-medium">Nurse</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">View Patients, Update Vitals</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">62</td>
+                                        <td class="px-4 py-2 whitespace-nowrap space-x-1">
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 text-xs"><ion-icon
+                                                    name="settings-outline"></ion-icon></button>
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 text-xs"><ion-icon
+                                                    name="trash-outline"></ion-icon></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-2 whitespace-nowrap font-medium">Receptionist</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">Appointments, Patient Registration</td>
+                                        <td class="px-4 py-2 whitespace-nowrap">12</td>
+                                        <td class="px-4 py-2 whitespace-nowrap space-x-1">
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-blue-500 text-xs"><ion-icon
+                                                    name="settings-outline"></ion-icon></button>
+                                            <button
+                                                class="inline-flex p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 text-red-500 text-xs"><ion-icon
+                                                    name="trash-outline"></ion-icon></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-all duration-300"
+                        data-aos="fade-left">
+                        <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700">
+                            <h2 class="text-lg sm:text-xl font-semibold text-gray-800 dark:text-gray-100">System
+                                Activity Log</h2>
+                        </div>
+                        <div class="p-4 sm:p-6 h-96 overflow-y-auto">
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-start space-x-2">
+                                    <ion-icon name="alert-circle-outline"
+                                        class="text-yellow-500 text-lg mt-0.5"></ion-icon>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">Login attempt failed for user
+                                            'admin'.</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">IP: 192.168.1.100 - 5 mins
+                                            ago</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <ion-icon name="checkmark-circle-outline"
+                                        class="text-green-500 text-lg mt-0.5"></ion-icon>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">User 'DrSmith' updated patient
+                                            record #P1023.</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">15 mins ago</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <ion-icon name="document-text-outline"
+                                        class="text-blue-500 text-lg mt-0.5"></ion-icon>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">New invoice #INV0023 generated by
+                                            'Receptionist01'.</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">30 mins ago</p>
+                                    </div>
+                                </li>
+                                <li class="flex items-start space-x-2">
+                                    <ion-icon name="person-add-outline"
+                                        class="text-purple-500 text-lg mt-0.5"></ion-icon>
+                                    <div>
+                                        <p class="text-gray-700 dark:text-gray-300">New user 'NurseBetty' created by
+                                            'AdminUser'.</p>
+                                        <p class="text-xs text-gray-500 dark:text-gray-400">1 hour ago</p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
