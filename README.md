@@ -5,7 +5,7 @@ A modern, responsive hospital and medical dashboard interface built using **HTML
 ![Sales Dashboard Preview](https://i.postimg.cc/SQrfGCmz/Screenshot-2025-08-08-142621.jpg)
 
 # 🌍 Website Live Preview
-Website Link: ()
+Website Link: (https://mediash-hospital-dashboard.netlify.app/)
 
 # 🎯 Features
 - 📊 Dashboard overview with statistics
